@@ -4,7 +4,7 @@ import {
     ref,
     set,
     onValue
-} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
 
 
 const numberInput = document.getElementById("number");
