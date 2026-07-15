@@ -9,6 +9,9 @@ import {
 const numberInput = document.getElementById("number");
 const button = document.querySelector("button");
 
+// 櫃台密鑰
+const ADMIN_KEY = "請改成你的密碼";
+
 // 資料庫位置
 const queueRef = ref(db, "queue");
 
@@ -21,8 +24,10 @@ onValue(queueRef, (snapshot) => {
   }
 });
 
+
 // 更新叫號
 button.addEventListener("click", async () => {
+
   const number = numberInput.value.trim();
 
   if (number === "") {
@@ -30,21 +35,37 @@ button.addEventListener("click", async () => {
     return;
   }
 
+
   button.disabled = true;
 
+
   try {
+
     await set(queueRef, {
+
       number: number,
-      time: new Date().toISOString()
+
+      time: new Date().toISOString(),
+
+      key: ADMIN_KEY
+
     });
+
 
     alert("更新完成");
 
+
   } catch (error) {
+
     console.error("Firebase Error:", error);
+
     alert("更新失敗：" + error.message);
 
+
   } finally {
+
     button.disabled = false;
+
   }
+
 });
