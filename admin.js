@@ -10,7 +10,7 @@ const numberInput = document.getElementById("number");
 const button = document.querySelector("button");
 
 // 櫃台密鑰
-const ADMIN_KEY = "請改成你的密碼";
+const ADMIN_KEY = "0731";
 
 // 資料庫位置
 const queueRef = ref(db, "queue");
