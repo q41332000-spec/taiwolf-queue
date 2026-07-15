@@ -26,21 +26,27 @@ onValue(queueRef, (snapshot)=>{
 
 
 // 更新號碼
-button.onclick = ()=>{
+button.onclick = async () => {
 
     const number = numberInput.value;
 
-    if(number){
+    if (number) {
 
-        set(queueRef,{
+        try {
 
-            number:number,
+            await set(queueRef, {
+                number: number,
+                time: new Date().toLocaleString("zh-TW")
+            });
 
-            time:new Date().toLocaleString("zh-TW")
+            alert("更新完成");
 
-        });
+        } catch (err) {
 
-        alert("更新完成");
+            console.error(err);
+            alert("更新失敗：" + err.message);
+
+        }
 
     }
 
