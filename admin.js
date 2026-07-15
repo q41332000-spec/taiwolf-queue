@@ -1,53 +1,50 @@
 import { db } from "./firebase.js";
 
 import {
-    ref,
-    set,
-    onValue
+  ref,
+  set,
+  onValue
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
-
 
 const numberInput = document.getElementById("number");
 const button = document.querySelector("button");
 
-
-// 顯示目前號碼
+// 資料庫位置
 const queueRef = ref(db, "queue");
 
-onValue(queueRef, (snapshot)=>{
+// 讀取目前號碼
+onValue(queueRef, (snapshot) => {
+  const data = snapshot.val();
 
-    const data = snapshot.val();
-
-    if(data){
-        numberInput.value = data.number;
-    }
-
+  if (data && data.number) {
+    numberInput.value = data.number;
+  }
 });
 
+// 更新叫號
+button.addEventListener("click", async () => {
+  const number = numberInput.value.trim();
 
-// 更新號碼
-button.onclick = async () => {
+  if (number === "") {
+    alert("請輸入號碼");
+    return;
+  }
 
-    const number = numberInput.value;
+  button.disabled = true;
 
-    if (number) {
+  try {
+    await set(queueRef, {
+      number: number,
+      time: new Date().toISOString()
+    });
 
-        try {
+    alert("更新完成");
 
-            await set(queueRef, {
-                number: number,
-                time: new Date().toLocaleString("zh-TW")
-            });
+  } catch (error) {
+    console.error("Firebase Error:", error);
+    alert("更新失敗：" + error.message);
 
-            alert("更新完成");
-
-        } catch (err) {
-
-            console.error(err);
-            alert("更新失敗：" + err.message);
-
-        }
-
-    }
-
-};
+  } finally {
+    button.disabled = false;
+  }
+});
